@@ -5,8 +5,6 @@ import cn.isekai.keycloak.avatar.spi.ConfigService;
 import cn.isekai.keycloak.avatar.storage.AvatarCropParams;
 import cn.isekai.keycloak.avatar.storage.AvatarStorageProvider;
 import cn.isekai.keycloak.avatar.utils.ResUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.Cache;
 import org.jboss.resteasy.annotations.cache.NoCache;

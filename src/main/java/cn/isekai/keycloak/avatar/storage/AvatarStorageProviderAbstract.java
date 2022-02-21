@@ -4,7 +4,10 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.jboss.logging.Logger;
 
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 public abstract class AvatarStorageProviderAbstract implements AvatarStorageProvider {
@@ -15,14 +18,14 @@ public abstract class AvatarStorageProviderAbstract implements AvatarStorageProv
                                            AvatarCropParams cropParams, Map<String, Integer> sizeList) {
         try {
             boolean succeed = true;
-            // 开始裁剪图片
+            // Start cropping the picture
             Thumbnails.Builder<? extends InputStream> cropper = Thumbnails.of(input).outputFormat("png");
             if (cropParams != null) {
                 cropper.sourceRegion(cropParams.x, cropParams.y, cropParams.size, cropParams.size);
             }
             BufferedImage croppedImage = cropper.scale(1).asBufferedImage();
             for(Map.Entry<String, Integer> entries: sizeList.entrySet()) {
-                // 转换尺寸
+                // Convert dimensions
                 Thumbnails.Builder<BufferedImage> resizer = Thumbnails.of(croppedImage)
                         .size(entries.getValue(), entries.getValue());
 
@@ -30,7 +33,7 @@ public abstract class AvatarStorageProviderAbstract implements AvatarStorageProv
                 resizer.outputFormat("png").toOutputStream(os);
                 InputStream is = new ByteArrayInputStream(os.toByteArray());
                 os.close();
-                // 保存对应尺寸的文件
+                // Save the file of the corresponding size
                 succeed = succeed && this.saveAvatarImage(realmName, userId, avatarId, is, entries.getKey());
                 is.close();
             }
